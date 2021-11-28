@@ -4,8 +4,8 @@ use Alura\Pdo\Domain\Model\Student;
 
 require_once 'vendor/autoload.php';
 
-$pathDb = __DIR__ . '/db.sqlite';
-$pdo = new PDO("sqlite:$pathDb");
+$databasePath = __DIR__ . '/db.sqlite';
+$pdo = new PDO("sqlite:$databasePath");
 
 $student = new Student(
     null,
