@@ -14,4 +14,3 @@
 - Use the `query()` function to execute `SELECT` queries;
 - Use the `fetchAll()` function to get the rows of data on table;
 - Use the `fetch` function to get the specific register on table and get all the registers no consumes memory doing a loop.
-- 
