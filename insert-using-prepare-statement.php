@@ -21,6 +21,4 @@ $statement->bindValue(2, $student->birthDate()->format('Y-m-d'));
 
 if ($statement->execute()) {
     echo "Aluno incluído.";
-    exit();
 }
-echo "Erro ao incluir aluno.";
