@@ -3,9 +3,9 @@
 require_once 'vendor/autoload.php';
 
 use Alura\Pdo\Domain\Model\Student;
+use Alura\Pdo\Infrastructure\Persistence\ConnectionCreator;
 
-$databasePath = __DIR__ . '/db.sqlite';
-$pdo = new PDO("sqlite:$databasePath");
+$pdo = ConnectionCreator::createConnection();
 
 $stmt = $pdo->query('SELECT * FROM students WHERE id = 2;');
 
