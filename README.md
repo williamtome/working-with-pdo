@@ -20,3 +20,4 @@
 - That _prepared statement_ can even help the performance of application.
 - The difference between `bindValue` and `bindParam` to link parameters to _prepared statement_.
 - We can inform the data type passes through the `PDO`, using the third parameter of `bindValue` and `bindParam`: `PDO::PARAM_INT`.
+- Refactoring...
