@@ -7,10 +7,12 @@ use Alura\Pdo\Domain\Repository\StudentRepository;
 use Alura\Pdo\Infrastructure\Persistence\ConnectionCreator;
 use DateTimeImmutable;
 use PDO;
+use PDOStatement;
 
 class PdoStudentRepository implements StudentRepository
 {
     private PDO $connection;
+    private PDOStatement $statement;
 
     public function __construct()
     {
@@ -19,9 +21,9 @@ class PdoStudentRepository implements StudentRepository
 
     public function allStudents(): array
     {
-        $statement = $this->connection->query('SELECT * FROM students;');
+        $this->statement = $this->connection->query('SELECT * FROM students;');
 
-        $students = $statement->fetchAll(PDO::FETCH_ASSOC);
+        $students = $this->statement->fetchAll(PDO::FETCH_ASSOC);
 
         return $this->getStudents($students);
     }
@@ -33,7 +35,14 @@ class PdoStudentRepository implements StudentRepository
 
     public function save(Student $student): bool
     {
-        // TODO: Implement save() method.
+        $this->statement = $this->connection->prepare(
+            'INSERT INTO students (name, birth_date) VALUES (:name, :birth_date);'
+        );
+
+        $this->statement->bindValue(':name', $student->name());
+        $this->statement->bindValue(':birth_date', $student->birthDate()->format('Y-m-d'));
+
+        return $this->statement->execute();
     }
 
     public function remove(Student $student): bool
