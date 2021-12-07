@@ -1,19 +1,18 @@
 <?php
 
 use Alura\Pdo\Domain\Model\Student;
-use Alura\Pdo\Infrastructure\Persistence\ConnectionCreator;
+use Alura\Pdo\Infrastructure\Repository\PdoStudentRepository;
 
 require_once 'vendor/autoload.php';
 
-$pdo = ConnectionCreator::createConnection();
-
 $student = new Student(
-    1,
-    'Vinícius Dias',
-    new DateTimeImmutable('1995-10-15')
+    3,
+    "Edi Maria Weirich",
+    new DateTimeImmutable('1966-07-03')
 );
 
-$sqlInsert = "INSERT INTO students (name, birth_date) VALUES ('{$student->name()}', '{$student->birthDate()->format('Y-m-d')}');";
+$studentRepository = new PdoStudentRepository();
 
-$row = $pdo->exec($sqlInsert);
-var_dump($row);
+if ($studentRepository->save($student)) {
+    echo "Aluno incluído.";
+}
