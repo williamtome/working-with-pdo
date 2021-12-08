@@ -3,25 +3,10 @@
 require_once 'vendor/autoload.php';
 
 use Alura\Pdo\Domain\Model\Student;
-use Alura\Pdo\Infrastructure\Persistence\ConnectionCreator;
+use Alura\Pdo\Infrastructure\Repository\PdoStudentRepository;
 
-$pdo = ConnectionCreator::createConnection();
+$studentRepository = new PdoStudentRepository();
 
-$stmt = $pdo->query('SELECT * FROM students WHERE id = 2;');
-
-/**
- * NOTE: o fetchAll() consome muita meméria quando é usado
- * para retornar uma massa de dados muito grande.
- * Para casos assim é aconselhado usar o fetch dentro de
- * um while.
- */
-while ($student = $stmt->fetch(PDO::FETCH_ASSOC)) {
-    $studentData = new Student(
-        $student['id'],
-        $student['name'],
-        new \DateTimeImmutable($student['birth_date'])
-    );
-
-    echo $studentData->age() . PHP_EOL;
-}
-exit();
+print_r($studentRepository->studentBirthAt(
+    new DateTimeImmutable('1966-07-03')
+));
