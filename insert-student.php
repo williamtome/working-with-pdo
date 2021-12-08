@@ -6,9 +6,9 @@ use Alura\Pdo\Infrastructure\Repository\PdoStudentRepository;
 require_once 'vendor/autoload.php';
 
 $student = new Student(
-    3,
-    "Edi Maria Weirich",
-    new DateTimeImmutable('1966-07-03')
+    null,
+    "Carlos', ''); DROP TABLE students; -- da Silva",
+    new DateTimeImmutable('1995-12-09')
 );
 
 $studentRepository = new PdoStudentRepository();
