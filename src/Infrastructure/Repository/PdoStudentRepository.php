@@ -23,48 +23,93 @@ class PdoStudentRepository implements StudentRepository
     {
         $this->statement = $this->connection->query('SELECT * FROM students;');
 
-        $students = $this->statement->fetchAll(PDO::FETCH_ASSOC);
-
-        return $this->getStudents($students);
+        return $this->hydrateStudentList($this->statement);
     }
 
     public function studentBirthAt(\DateTimeInterface $birthDate): array
     {
-        // TODO: Implement studentBirthAt() method.
+        $selectQuery = "SELECT * FROM students WHERE birth_date = ?;";
+        $this->statement = $this->connection->query($selectQuery);
+        $this->statement->bindValue(1, $birthDate->format('Y-m-d'));
+        $this->statement->execute();
+
+        return $this->hydrateStudentList($this->statement);
     }
 
-    public function save(Student $student): bool
+    public function find(int $id): ?Student
     {
-        $this->statement = $this->connection->prepare(
-            'INSERT INTO students (name, birth_date) VALUES (:name, :birth_date);'
-        );
+        $selectStudentQuery = 'SELECT * FROM students WHERE id = ?;';
+        $this->statement = $this->connection->prepare($selectStudentQuery);
+        $this->statement->bindValue(1, $id, PDO::PARAM_INT);
+        $this->statement->execute();
 
-        $this->statement->bindValue(':name', $student->name());
-        $this->statement->bindValue(':birth_date', $student->birthDate()->format('Y-m-d'));
+        $studentList = $this->hydrateStudentList($this->statement);
 
-        return $this->statement->execute();
+        return count($studentList) === 1 ? array_shift($studentList) : null;
     }
 
-    public function remove(Student $student): bool
+    private function hydrateStudentList(PDOStatement $statement): array
     {
-        // TODO: Implement remove() method.
-    }
-
-    /**
-     * @throws \Exception
-     */
-    private function getStudents(array $students): array
-    {
+        $studentDataList = $statement->fetchAll(PDO::FETCH_ASSOC);
         $studentList = [];
 
-        foreach ($students as $student) {
+        foreach ($studentDataList as $studentData) {
             $studentList[] = new Student(
-                $student['id'],
-                $student['name'],
-                new DateTimeImmutable($student['birth_date'])
+                $studentData['id'],
+                $studentData['name'],
+                new DateTimeImmutable($studentData['birth_date'])
             );
         }
 
         return $studentList;
+    }
+
+    public function save(Student $student): bool
+    {
+        if ($student->id() === null) {
+            return $this->insert($student);
+        }
+
+        return $this->update($student);
+    }
+
+    private function insert(Student $student): bool
+    {
+        $insertQuery = 'INSERT INTO students (name, birth_date) VALUES (:name, :birth_date);';
+        $this->statement = $this->connection->prepare($insertQuery);
+
+        $success = $this->statement->execute([
+            ':name' => $student->name(),
+            ':birth_date' => $student->birthDate()->format('Y-m-d')
+        ]);
+
+        if ($success) {
+            $student->defineId($this->connection->lastInsertId());
+        }
+
+        return $success;
+    }
+
+    private function update(Student $student): bool
+    {
+        $updateQuery = 'UPDATE students SET name = :name, birth_date = :birth_date WHERE id = :id;';
+        $this->statement = $this->connection->prepare($updateQuery);
+        $this->statement->bindValue(':name', $student->name());
+        $this->statement->bindValue(':birth_date', $student->birthDate()->format('Y-m-d'));
+        $this->statement->bindValue(':id', $student->id(), PDO::PARAM_INT);
+
+        return $this->statement->execute();
+    }
+
+    public function remove(?Student $student): bool
+    {
+        if (is_null($student)) {
+            return false;
+        }
+
+        $this->statement = $this->connection->prepare('DELETE FROM students WHERE id = :id;');
+        $this->statement->bindValue(1, $student->id(), PDO::PARAM_INT);
+
+        return $this->statement->execute();
     }
 }
