@@ -11,7 +11,7 @@ $stmt = $pdo->query('SELECT * FROM students WHERE id = 2;');
 
 /**
  * NOTE: o fetchAll() consome muita meméria quando é usado
- * para retrrnar uma massa de dados muito grande.
+ * para retornar uma massa de dados muito grande.
  * Para casos assim é aconselhado usar o fetch dentro de
  * um while.
  */
