@@ -11,7 +11,10 @@ $student = new Student(
     new DateTimeImmutable('1995-12-09')
 );
 
-$studentRepository = new PdoStudentRepository();
+$databasePath = __DIR__ . '/db.sqlite';
+$pdo = new PDO("sqlite:$databasePath");
+
+$studentRepository = new PdoStudentRepository($pdo);
 
 if ($studentRepository->save($student)) {
     echo "Aluno incluído.";
