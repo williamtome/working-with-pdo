@@ -23,3 +23,6 @@
 - The best practices and design patterns with object orientation.
 - The **_Entity_** pattern, and it's already been applied this project.
 - The **_Creation Method_** pattern that create a connection so don't need repeat this code on application.
+- The **_Repository_** pattern allow to extract the persistence logic for the specific class.
+- To abstract the repository implementation through an interface that can change implementation on future, case necessary.
+- The dependency injection concept and yours several advantages at development.
