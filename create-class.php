@@ -17,4 +17,4 @@ $repository->save($student);
 $anotherStudent = new Student(null, 'Sérgio Lopes', new DateTimeImmutable('1985-10-01'));
 $repository->save($anotherStudent);
 
-$connection->commit();
+$connection->rollBack();
