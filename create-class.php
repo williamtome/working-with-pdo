@@ -9,13 +9,17 @@ require_once 'vendor/autoload.php';
 $connection = ConnectionCreator::createConnection();
 
 $connection->beginTransaction();
-$repository = new PdoStudentRepository($connection);
+try {
+    $repository = new PdoStudentRepository($connection);
 
-$student = new Student(null, 'Nico Steppat', new DateTimeImmutable('1985-10-01'));
-$repository->save($student);
+    $student = new Student(null, 'Nico Steppat', new DateTimeImmutable('1985-10-01'));
+    $repository->save($student);
 
-$anotherStudent = new Student(null, 'Sérgio Lopes', new DateTimeImmutable('1985-10-01'));
-$repository->save($anotherStudent);
+    $anotherStudent = new Student(null, 'Sérgio Lopes', new DateTimeImmutable('1985-10-01'));
+    $repository->save($anotherStudent);
 
-//$connection->commit();
-$connection->rollBack();
+    $connection->commit();
+} catch (RuntimeException $e) {
+    echo $e->getMessage();
+    $connection->rollBack();
+}
