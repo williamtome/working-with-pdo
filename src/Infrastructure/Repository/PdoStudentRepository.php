@@ -49,7 +49,7 @@ class PdoStudentRepository implements StudentRepository
 
     private function hydrateStudentList(PDOStatement $statement): array
     {
-        $studentDataList = $statement->fetchAll(PDO::FETCH_ASSOC);
+        $studentDataList = $statement->fetchAll();
         $studentList = [];
 
         foreach ($studentDataList as $studentData) {
