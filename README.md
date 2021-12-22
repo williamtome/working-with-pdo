@@ -26,3 +26,8 @@
 - The **_Repository_** pattern allow to extract the persistence logic for the specific class.
 - To abstract the repository implementation through an interface that can change implementation on future, case necessary.
 - The dependency injection concept and yours several advantages at development.
+- The importance of handle errors in our application.
+- By default, the **PDO** don't emit any error type.
+- To recover the error information by `errorInfo` method.
+- How to inform to **PDO** throw exceptions in error case.
+- Other attributes to configure the database connection using **PDO**
