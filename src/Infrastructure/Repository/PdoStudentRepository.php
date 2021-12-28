@@ -2,6 +2,7 @@
 
 namespace Alura\Pdo\Infrastructure\Repository;
 
+use Alura\Pdo\Domain\Model\Phone;
 use Alura\Pdo\Domain\Model\Student;
 use Alura\Pdo\Domain\Repository\StudentRepository;
 use DateTimeImmutable;
@@ -110,5 +111,33 @@ class PdoStudentRepository implements StudentRepository
         $this->statement->bindValue(1, $student->id(), PDO::PARAM_INT);
 
         return $this->statement->execute();
+    }
+
+    public function studentsWithPhones(): array
+    {
+        $sqlQuery = '
+            SELECT students.id,
+                   students.name,
+                   students.birth_date,
+                   phones.id AS phone_id,
+                   phones.area_code,
+                   phones.number
+              FROM students
+               JOIN phones
+                ON students.id = phones.student_id;
+        ';
+
+        $this->statement = $this->connection->query($sqlQuery);
+        $studentList = [];
+
+        foreach ($this->statement->fetchAll() as $row) {
+            if (!array_key_exists($row['id'], $studentList)) {
+                $studentList[$row['id']] = new Student($row['id'], $row['name'], new DateTimeImmutable($row['birth_date']));
+            }
+            $phone = new Phone($row['phone_id'], $row['area_code'], $row['number']);
+            $studentList[$row['id']]->addPhone($phone);
+        }
+
+        return $studentList;
     }
 }
