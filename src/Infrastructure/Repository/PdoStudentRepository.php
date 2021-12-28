@@ -128,14 +128,19 @@ class PdoStudentRepository implements StudentRepository
         ';
 
         $this->statement = $this->connection->query($sqlQuery);
+
+        return $this->addPhonesForStudent($this->statement);
+    }
+
+    private function addPhonesForStudent(PDOStatement $statement): array
+    {
         $studentList = [];
 
-        foreach ($this->statement->fetchAll() as $row) {
+        foreach ($statement->fetchAll() as $row) {
             if (!array_key_exists($row['id'], $studentList)) {
                 $studentList[$row['id']] = new Student($row['id'], $row['name'], new DateTimeImmutable($row['birth_date']));
             }
-            $phone = new Phone($row['phone_id'], $row['area_code'], $row['number']);
-            $studentList[$row['id']]->addPhone($phone);
+            $studentList[$row['id']]->addPhone($row['phone_id'], $row['area_code'], $row['number']);
         }
 
         return $studentList;
