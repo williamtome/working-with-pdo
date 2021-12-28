@@ -53,8 +53,10 @@ class Student
             ->y;
     }
 
-    public function addPhone(Phone $phone): void
+    public function addPhone(?int $phoneId, string $areaCode, string $number): void
     {
+        $phone = new Phone($phoneId, $areaCode, $number);
+
         $this->phones[] = $phone;
     }
 
