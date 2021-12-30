@@ -1,5 +1,7 @@
 # Working Databases With PDO
 
+This repo was created to learn how to persist data in relational database using **PDO**, an PHP extension many used on real world applications and by the PHP community.
+
 ## Techs
 
 - PHP 8
