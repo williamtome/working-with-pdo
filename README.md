@@ -30,4 +30,11 @@
 - By default, the **PDO** don't emit any error type.
 - To recover the error information by `errorInfo` method.
 - How to inform to **PDO** throw exceptions in error case.
-- Other attributes to configure the database connection using **PDO**
+- Other attributes to configure the database connection using **PDO**.
+- To relate data on database in our object oriented application.
+- The **_Aggregate_** pattern where the objects access is controlled by others objects.
+- The **N + 1** problem that is a big performance problem.
+- How to solve the **N + 1** queries problem.
+- There are differences between the relational world (database) and the object oriented world (application).
+- The ORM's can help us to scan between these two worlds.
+- How it is easy to migrate database system using **PDO**.
